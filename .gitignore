@@ -1,0 +1,48 @@
+# Виртуальные окружения
+venv/
+.venv/
+env/
+ENV/
+
+# Python-кэш
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Локальная база данных SQLite
+*.db
+*.sqlite
+*.sqlite3
+
+# Переменные окружения и секреты
+.env
+.env.local
+.env.*.local
+
+# Настройки IDE (VS Code, PyCharm)
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Логи и временные файлы
+*.log
+.DS_Store
+Thumbs.db
