@@ -66,7 +66,7 @@ async def get_ad_view(request: web.Request) -> web.Response:
         return web.json_response(ad.to_dict())
 
 
-async def patch_ad():
+async def patch_ad(request: web.Request) -> web.Response:
     ad_id = int(request.match_info['ad_id'])
     json_data = await request.json()
     data = validate(UpdateAd, json_data)
@@ -82,7 +82,7 @@ async def patch_ad():
         return web.json_response(ad.to_dict())
 
 
-async def delete_ad():
+async def delete_ad(request: web.Request) -> web.Response:
     ad_id = int(request.match_info['ad_id'])
     async with async_session() as session:
         user = await get_current_user(session, request)
@@ -92,21 +92,22 @@ async def delete_ad():
         await session.delete(ad)
         await session.commit()
         return web.json_response({"status": "deleted"})
-
+    
+    
+async def init_db():
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
 
 app = web.Application(middlewares=[error_middleware])
+
+app.on_startup.append(init_db)
+
 app.router.add_post('/users', create_user)
 app.router.add_post('/ads', create_ad)
 app.router.add_get('/ads/{ad_id}', get_ad_view)
 app.router.add_patch('/ads/{ad_id}', patch_ad)
 app.router.add_delete('/ads/{ad_id}', delete_ad)
-
-
-async def init_db():
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
         
 
 if __name__ == '__main__':
-    asyncio.run(init_db())
     web.run_app(app, host='0.0.0.0', port=5000)
